@@ -32,14 +32,14 @@ int main() {
   sf::SoundBuffer rowclearbuffer2("./audio/carlin_jesus.wav");
   sf::Sound rc2(rowclearbuffer2);
 
-  sf::RectangleShape rectangle({20.f, 1080.f});
+  sf::RectangleShape rectangle({20.f, 900.f});
   rectangle.setOrigin({rectangle.getSize().x / 2, rectangle.getSize().y / 2});
   rectangle.setPosition({600, 540});
 
-  sf::RectangleShape rectangle2({20.f, 1080.f});
+  sf::RectangleShape rectangle2({20.f, 920.f});
   rectangle2.setOrigin(
       {rectangle2.getSize().x / 2, rectangle2.getSize().y / 2});
-  rectangle2.setPosition({1190, 540});
+  rectangle2.setPosition({1190, 550});
 
   sf::RectangleShape rectangle3({600.f, 20.f});
   rectangle3.setOrigin(
@@ -73,24 +73,58 @@ int main() {
 
   std::vector<sf::RectangleShape> grid;
 
-  int columns = 33;
-  int rows = 19;
+  int rows = 31;
+  int colm = 19;
 
   float increment = 30.f;
   int rgbint = 5;
-  for (int x = 0; x < columns; x++) {
-    for (int j = 0; j < rows; j++) {
-      sf::RectangleShape one({30.f, 30.f});
-      one.setOrigin({one.getSize().x / 2, one.getSize().y / 2});
-      one.setPosition({625.f + (increment * j), 975.f - (increment * x)});
-      // one.setFillColor(sf::Color(100, (rgbint % 255), 100, 255));
-      one.setFillColor(sf::Color::Transparent);
-      one.setOutlineThickness(0.9f);
-      one.setOutlineColor(sf::Color::White);
-      grid.push_back(one);
-      rgbint += 5;
+  // for (int x = 0; x < columns; x++) {
+  //   for (int j = 0; j < rows; j++) {
+  //     sf::RectangleShape one({28.f, 28.f});
+  //     one.setOrigin({one.getSize().x / 2, one.getSize().y / 2});
+  //     one.setPosition({625.f + (increment * j), 975.f - (increment * x)});
+  //     // one.setFillColor(sf::Color(100, (rgbint % 255), 100, 255));
+  //     one.setFillColor(sf::Color::Transparent);
+  //     one.setOutlineThickness(1.f);
+  //     one.setOutlineColor(sf::Color::White);
+  //     grid.push_back(one);
+  //     rgbint += 5;
+  //   }
+  // }
+
+  // better grid kind of
+  std::cout << "Left Rec X: " << rectangle.getPosition().x
+            << ", Right Rect X: " << rectangle2.getPosition().x
+            << "Difference: "
+            << rectangle2.getPosition().x - rectangle.getPosition().x << "\n";
+  for (int x = 0; x < rows; x++) {
+    sf::RectangleShape row(
+        {rectangle2.getPosition().x - rectangle.getPosition().x, 2.f});
+    if (x == 25) {
+      row.setFillColor(sf::Color::Red);
     }
+    row.setOrigin({row.getSize().x / 2, row.getSize().y / 2});
+    float distancefromy = rectangle3.getPosition().y +
+                          (rectangle3.getSize().y / 2) - ((x + 1) * 30.f);
+    row.setPosition(
+        {((rectangle2.getPosition().x - rectangle.getPosition().x) / 2) +
+             rectangle.getPosition().x,
+         distancefromy + 10});
+    // std::cout << "Row X: " << row.getPosition().x
+    //           << ", Y: " << row.getPosition().y << "\n";
+    grid.push_back(row);
   }
+  for (int x = 0; x < colm; x++) {
+    sf::RectangleShape row({2.f, rectangle.getSize().y});
+    row.setOrigin({row.getSize().x / 2, row.getSize().y / 2});
+    float distancefromy = rectangle.getPosition().x +
+                          (rectangle.getSize().x / 2) + ((x + 1) * 30.f);
+    row.setPosition({distancefromy, (rectangle.getPosition().y)});
+    // std::cout << "Row X: " << row.getPosition().x
+    //           << ", Y: " << row.getPosition().y << "\n";
+    grid.push_back(row);
+  }
+
   sf::Clock c1;
   float yarr[33];
   yarr[0] = 975.f;
@@ -98,9 +132,9 @@ int main() {
     yarr[x] = yarr[x - 1] - 30.f;
   }
 
-  for (auto a : yarr) {
-    std::cout << "Y: " << a << "\n";
-  }
+  // for (auto a : yarr) {
+  //   std::cout << "Y: " << a << "\n";
+  // }
 
   std::vector<sf::RectangleShape *> clearrow;
   float ypos = 0.f;
@@ -171,8 +205,9 @@ int main() {
           }
           /// yeah this is not the way but fuck it, this is unlikely to ever run
           /// anyway
-          if (a.s1.getPosition().y <= 135 || a.s2.getPosition().y <= 135 ||
-              a.s3.getPosition().y <= 135 || a.s4.getPosition().y <= 135) {
+          if (a.s1.getPosition().y == 135 || a.s2.getPosition().y == 135 ||
+              a.s3.getPosition().y == 135 || a.s4.getPosition().y == 135) {
+            std::cout << "closing game now";
             window.close();
           }
         }
