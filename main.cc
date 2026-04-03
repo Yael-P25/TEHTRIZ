@@ -32,11 +32,11 @@ int main() {
   sf::SoundBuffer rowclearbuffer2("./audio/carlin_jesus.wav");
   sf::Sound rc2(rowclearbuffer2);
 
-  sf::RectangleShape rectangle({20.f, 940.f});
+  sf::RectangleShape rectangle({20.f, 1080.f});
   rectangle.setOrigin({rectangle.getSize().x / 2, rectangle.getSize().y / 2});
   rectangle.setPosition({600, 540});
 
-  sf::RectangleShape rectangle2({20.f, 940.f});
+  sf::RectangleShape rectangle2({20.f, 1080.f});
   rectangle2.setOrigin(
       {rectangle2.getSize().x / 2, rectangle2.getSize().y / 2});
   rectangle2.setPosition({1190, 540});
@@ -56,7 +56,7 @@ int main() {
   point.setString("pOiNTs: " + std::to_string(ppoints));
   point.setCharacterSize(32);
   point.setFillColor(sf::Color::White);
-  point.setPosition({700, 1020});
+  point.setPosition({350, 800});
 
   sf::Text why(font1);
   why.setString("Why do you still play\nClose the shit NOW\nPLS ))))");
@@ -85,7 +85,7 @@ int main() {
       one.setPosition({625.f + (increment * j), 975.f - (increment * x)});
       // one.setFillColor(sf::Color(100, (rgbint % 255), 100, 255));
       one.setFillColor(sf::Color::Transparent);
-      one.setOutlineThickness(1.f);
+      one.setOutlineThickness(0.9f);
       one.setOutlineColor(sf::Color::White);
       grid.push_back(one);
       rgbint += 5;
@@ -169,6 +169,12 @@ int main() {
             ++count;
             mytrans.push_back(&a.s4);
           }
+          /// yeah this is not the way but fuck it, this is unlikely to ever run
+          /// anyway
+          if (a.s1.getPosition().y <= 135 || a.s2.getPosition().y <= 135 ||
+              a.s3.getPosition().y <= 135 || a.s4.getPosition().y <= 135) {
+            window.close();
+          }
         }
       }
       if (count == 19) {
@@ -240,6 +246,16 @@ int main() {
       piano.play();
     }
 
+    // prob not the way to do it but........
+    for (int x = 0; x < myblocks.size(); x++) {
+      if (myblocks[x].s1.getFillColor() == sf::Color::Transparent &&
+          myblocks[x].s2.getFillColor() == sf::Color::Transparent &&
+          myblocks[x].s3.getFillColor() == sf::Color::Transparent &&
+          myblocks[x].s4.getFillColor() == sf::Color::Transparent) {
+        myblocks.erase(myblocks.begin() + x);
+      }
+    }
+
     // std::cout << "Points now: " << ppoints << "\n";
     window.clear();
     window.draw(bg);
@@ -257,9 +273,9 @@ int main() {
     for (auto a : myblocks) {
       a.Draw(window);
     }
-    // for (auto a : grid) {
-    //   window.draw(a);
-    // }
+    for (auto a : grid) {
+      window.draw(a);
+    }
     // window.draw(rectangle4);
     window.display();
   }
